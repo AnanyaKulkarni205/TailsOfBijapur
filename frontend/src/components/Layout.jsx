@@ -36,6 +36,7 @@ const Nav = () => {
           <NavLink to="/volunteer" className={linkClass}>Volunteer</NavLink>
           <NavLink to="/surrender" className={linkClass}>Rescue</NavLink>
           <NavLink to="/contact" className={linkClass}>Contact</NavLink>
+          <NavLink to="/doctors" className={linkClass}>Veterinary Support</NavLink>
 
           <NavLink
             to="/contact"
@@ -58,10 +59,10 @@ const Nav = () => {
       {/* Mobile menu */}
       {open && (
         <div className="md:hidden bg-[#FAF7F2] border-t border-[#E7E1D8] px-6 py-4 space-y-4 text-sm">
-          {["About","Adopt","Volunteer","Rescue","Contact"].map((item) => (
+          {["About","Adopt","Volunteer","Rescue","Contact","Veterinary Support"].map((item) => (
             <NavLink
               key={item}
-              to={`/${item.toLowerCase()}`}
+              to={`/${item.toLowerCase().replace(" ", "-")}`}
               onClick={() => setOpen(false)}
               className={linkClass}
             >
@@ -119,6 +120,7 @@ const Footer = () => {
             <li><NavLink to="/adopt" className="text-[#4B5563] hover:text-[#C2410C]">Adopt</NavLink></li>
             <li><NavLink to="/volunteer" className="text-[#4B5563] hover:text-[#C2410C]">Volunteer</NavLink></li>
             <li><NavLink to="/surrender" className="text-[#4B5563] hover:text-[#C2410C]">Surrender</NavLink></li>
+            <li><NavLink to="/doctors" className="text-[#4B5563] hover:text-[#C2410C]">Veterinary Support</NavLink></li>
           </ul>
         </div>
 

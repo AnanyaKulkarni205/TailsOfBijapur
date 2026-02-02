@@ -13,9 +13,11 @@ import Contact from './pages/Contact'
 import Layout from './components/Layout'
 import AdoptDetails from './pages/AdoptDetails'
 import WhyAdopt from './pages/WhyAdopt'
+import Doctors from "./pages/Doctors";
 
 
-function App(){
+
+function App() {
   return (
     <BrowserRouter>
       <Routes>
@@ -23,17 +25,17 @@ function App(){
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
           <Route path="adopt" element={<Adopt />} />
-          <Route path="/adopt/:id" element={<AdoptDetails />} />
+          <Route path="adopt/:id" element={<AdoptDetails />} />
           <Route path="volunteer" element={<Volunteer />} />
           <Route path="surrender" element={<Surrender />} />
           <Route path="contact" element={<Contact />} />
-          {/* <Route path="donate" element={<Donate />} />   */}
-          <Route path="/why-adopt" element={<WhyAdopt />} />
-
+          <Route path="why-adopt" element={<WhyAdopt />} />
+          <Route path="doctors" element={<Doctors />} />
+          {/* <Route path="donate" element={<Donate />} /> */}
         </Route>
       </Routes>
     </BrowserRouter>
-  )
+  );
 }
 
 createRoot(document.getElementById('root')).render(<App />)
