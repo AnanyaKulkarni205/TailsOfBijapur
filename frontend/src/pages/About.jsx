@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import volunteers from "../data/volunteers.json";
 
 export default function About() {
   return (
@@ -109,23 +110,22 @@ export default function About() {
           <p className="text-lg text-gray-700">The Hearts Behind the Mission</p>
         </div>
 
-        <div className="overflow-hidden">
-          <div className="flex gap-6 animate-scroll">
-            {[...Array(2)].flatMap(() =>
-              Array.from({ length: 8 }).map((_, i) => (
-                <div
-                  key={Math.random()}
-                  className="min-w-[220px] bg-[#f9efe5] p-6 rounded-xl shadow text-center flex flex-col items-center"
-                >
-                  <img
-                    src="/icons/user-placeholder.png"
-                    className="h-24 w-24 rounded-full mb-4 border-2 border-orange-400"
-                  />
-                  <h3 className="text-xl font-semibold">Volunteer</h3>
-                  <p className="text-gray-600 text-sm mt-1">TOB Volunteer</p>
-                </div>
-              ))
-            )}
+        <div className="overflow-x-auto">
+          <div className="flex gap-6 min-w-max">
+            {volunteers.map((vol, index) => (
+              <div
+                key={index}
+                className="min-w-[220px] bg-[#f9efe5] p-6 rounded-xl shadow text-center flex flex-col items-center"
+              >
+                <img
+                  src={vol.photo}
+                  className="h-24 w-24 rounded-full mb-4 border-2 border-orange-400"
+                  alt={vol.name}
+                />
+                <h3 className="text-xl font-semibold">{vol.name}</h3>
+                <p className="text-gray-600 text-sm mt-1">{vol.role}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
