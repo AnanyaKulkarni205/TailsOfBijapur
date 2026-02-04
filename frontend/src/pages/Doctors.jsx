@@ -50,7 +50,8 @@ const Doctors = () => {
         <a
           href={ALL_VETS_MAP}
           target="_blank"
-          rel="noreferrer"
+          rel="noopener noreferrer"
+          aria-label="View all veterinary clinics on Google Maps (opens in a new tab)"
           className="inline-block mt-6 px-6 py-3 text-sm font-medium rounded-md bg-[#C2410C] text-white hover:bg-[#9A3412] transition"
         >
           View all vets on map
@@ -59,11 +60,11 @@ const Doctors = () => {
 
       {/* Doctor Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {doctors.map((doc, index) => (
-        <div
-        key={index}
-        className="bg-white border-l-4 border-[#C2410C] rounded-xl p-7 shadow-sm hover:shadow-md transition"
-        >
+        {doctors.map((doc) => (
+          <div
+            key={doc.name}
+            className="bg-white border-l-4 border-[#C2410C] rounded-xl p-7 shadow-sm hover:shadow-md transition"
+          >
 
             {/* Name */}
             <h2 className="text-xl font-semibold text-[#1F2933]">
@@ -83,7 +84,8 @@ const Doctors = () => {
             {/* Actions */}
             <div className="mt-6 flex flex-wrap gap-4">
               <a
-                href={`tel:${doc.phone}`}
+                href={`tel:${doc.phone.replace(/\D/g, '')}`}
+                aria-label={`Call ${doc.name} at ${doc.phone}`}
                 className="px-5 py-2.5 text-sm font-medium rounded-md border border-[#C2410C] text-[#C2410C] hover:bg-[#C2410C] hover:text-white transition"
               >
                 Call Doctor
@@ -92,7 +94,8 @@ const Doctors = () => {
               <a
                 href={doc.mapLink}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
+                aria-label={`Open directions to ${doc.clinic}`}
                 className="px-5 py-2.5 text-sm font-medium rounded-md bg-[#FAF7F2] text-[#1F2933] hover:bg-[#F1ECE5] transition"
               >
                 Get Directions

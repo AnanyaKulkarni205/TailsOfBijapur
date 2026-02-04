@@ -34,7 +34,7 @@ const Nav = () => {
           <NavLink to="/about" className={linkClass}>About</NavLink>
           <NavLink to="/adopt" className={linkClass}>Adopt</NavLink>
           <NavLink to="/volunteer" className={linkClass}>Volunteer</NavLink>
-          <NavLink to="/surrender" className={linkClass}>Rescue</NavLink>
+          {/*<NavLink to="/surrender" className={linkClass}>Rescue</NavLink> */}
           <NavLink to="/contact" className={linkClass}>Contact</NavLink>
           <NavLink to="/doctors" className={linkClass}>Veterinary Support</NavLink>
 

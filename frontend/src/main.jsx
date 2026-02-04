@@ -28,7 +28,7 @@ function App() {
           <Route path="adopt" element={<Adopt />} />
           <Route path="adopt/:id" element={<AdoptDetails />} />
           <Route path="volunteer" element={<Volunteer />} />
-          <Route path="surrender" element={<Surrender />} />
+          {/*<Route path="surrender" element={<Surrender />} */}
           <Route path="contact" element={<Contact />} />
           <Route path="why-adopt" element={<WhyAdopt />} />
           <Route path="doctors" element={<Doctors />} />
