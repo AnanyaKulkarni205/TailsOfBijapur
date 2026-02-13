@@ -1,53 +1,125 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Admin() {
   const [adoptions, setAdoptions] = useState([]);
   const [volunteers, setVolunteers] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchAdoptions();
-    fetchVolunteers();
+    const token = localStorage.getItem("adminToken");
+
+    if (!token) {
+      navigate("/admin-login");
+      return;
+    }
+
+    fetchAdoptions(token);
+    fetchVolunteers(token);
   }, []);
 
-  async function fetchAdoptions() {
-    const res = await fetch("/api/adopt-submissions");
-    const data = await res.json();
-    setAdoptions(data);
+  async function fetchAdoptions(token) {
+    try {
+      const res = await fetch("/api/admin/adoptions", {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+
+      if (res.status === 401) {
+        localStorage.removeItem("adminToken");
+        navigate("/admin-login");
+        return;
+      }
+
+      const data = await res.json();
+      setAdoptions(data);
+    } catch (err) {
+      console.error(err);
+    }
   }
 
-  async function fetchVolunteers() {
-    const res = await fetch("/api/volunteers");
-    const data = await res.json();
-    setVolunteers(data);
+  async function fetchVolunteers(token) {
+    try {
+      const res = await fetch("/api/admin/volunteers", {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+
+      if (res.status === 401) {
+        localStorage.removeItem("adminToken");
+        navigate("/admin-login");
+        return;
+      }
+
+      const data = await res.json();
+      setVolunteers(data);
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   async function updateAdoption(id, status) {
-    await fetch(`/api/adopt-submissions/${id}`, {
+    const token = localStorage.getItem("adminToken");
+
+    await fetch(`/api/admin/adoptions/${id}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
       body: JSON.stringify({ status }),
     });
-    fetchAdoptions();
+
+    fetchAdoptions(token);
   }
 
   async function updateVolunteer(id, status) {
+    const token = localStorage.getItem("adminToken");
+
     await fetch(`/api/volunteers/${id}`, {
+
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
       body: JSON.stringify({ status }),
     });
-    fetchVolunteers();
+
+    fetchVolunteers(token);
+  }
+
+  function logout() {
+    localStorage.removeItem("adminToken");
+    navigate("/admin-login");
   }
 
   return (
     <div className="p-10 bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-bold mb-8">Admin Dashboard</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+        <button
+          onClick={logout}
+          className="bg-black text-white px-4 py-2 rounded"
+        >
+          Logout
+        </button>
+      </div>
 
       {/* Adoption Section */}
       <h2 className="text-2xl font-semibold mb-4">Adoption Requests</h2>
       <div className="space-y-4 mb-12">
         {adoptions.map((item) => (
           <div key={item._id} className="bg-white p-5 rounded shadow">
+          {item.image && (
+            <img
+              src={item.image}
+              alt="Puppy"
+              className="w-40 h-40 object-cover rounded mb-4"
+            />
+          )}
             <p><strong>Name:</strong> {item.name}</p>
             <p><strong>Email:</strong> {item.email}</p>
             <p><strong>Location:</strong> {item.location}</p>
