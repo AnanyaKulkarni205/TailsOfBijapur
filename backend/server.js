@@ -55,7 +55,12 @@ const volunteerSchema = new mongoose.Schema({
     role: String,
     time: String,
     why: String,
+    status: {
+        type: String,
+        default: "PENDING",
+    },
 }, { timestamps: true });
+
 
 const Volunteer = mongoose.model("Volunteer", volunteerSchema);
 
@@ -207,6 +212,54 @@ app.get("/api/adopt-submissions", async(req, res) => {
         res.json(submissions);
     } catch (err) {
         res.status(500).json({ error: "Failed to fetch submissions" });
+    }
+});
+
+/* ==============================
+   Get All Volunteer Applications
+============================== */
+app.get("/api/volunteers", async(req, res) => {
+    try {
+        const volunteers = await Volunteer.find().sort({ createdAt: -1 });
+        res.json(volunteers);
+    } catch (err) {
+        res.status(500).json({ error: "Failed to fetch volunteers" });
+    }
+});
+
+/* ==============================
+   Approve / Reject Volunteer
+============================== */
+app.patch("/api/volunteers/:id", async(req, res) => {
+    try {
+        const { status } = req.body;
+
+        const updated = await Volunteer.findByIdAndUpdate(
+            req.params.id, { status }, { new: true }
+        );
+
+        if (status === "APPROVED" && updated.email) {
+            await transporter.sendMail({
+                from: `"Tails of Bijapur" <${process.env.SMTP_USER}>`,
+                to: updated.email,
+                subject: "🐾 Volunteer Application Approved!",
+                text: `
+Hello ${updated.name},
+
+Your volunteer application has been approved!
+
+We will contact you soon.
+
+Thank you,
+Tails of Bijapur
+                `,
+            });
+        }
+
+        res.json(updated);
+    } catch (err) {
+        console.error("VOLUNTEER STATUS ERROR:", err);
+        res.status(500).json({ error: "Failed to update status" });
     }
 });
 
