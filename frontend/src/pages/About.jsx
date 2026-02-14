@@ -41,32 +41,32 @@ export default function About() {
       </section>
 
 {/* OUR VALUES */}
+{/* OUR VALUES */}
 <section className="mt-14 py-14 bg-[#FAF7F2] rounded-2xl">
-  <div className="text-center mb-10">
+  <div className="text-center mb-12">
     <h2 className="text-3xl font-bold text-gray-900">
       Our Values
     </h2>
-    <p className="text-lg text-gray-600 mt-1">
-      What guides everything we do
-    </p>
   </div>
 
-  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 px-4">
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 px-6">
+
     {[
       {
-        icon: "compassion",
-        title: "Compassion",
-        text: "Every animal deserves care, respect, and kindness, regardless of its past."
-      },  
-      {
-        icon: "rehab",
-        title: "Awareness",
-        text: "Educating people about responsible care, coexistence, and compassion towards animals."
+        title: "Adopt",
+        text: "Every adoption gives a rescued animal a second chance at life and a loving home."
       },
       {
-        icon: "community",
-        title: "Community",
-        text: "Real change happens when people come together for a shared cause."
+        title: "Vaccinate",
+        text: "Preventive care protects both animals and communities from life-threatening diseases."
+      },
+      {
+        title: "Educate",
+        text: "Spreading awareness builds responsible pet care and compassionate neighborhoods."
+      },
+      {
+        title: "Coexist",
+        text: "Humans and animals can live safely together through understanding and respect."
       },
     ].map((item) => (
       <div
@@ -74,37 +74,30 @@ export default function About() {
         className="
           bg-white
           border border-[#E7E1D8]
-          p-7
+          p-8
           rounded-2xl
           shadow-sm
-          flex
-          flex-col
-          items-center
           text-center
           transition
           hover:shadow-md
-          hover:-translate-y-1
         "
       >
-        <img
-          src={`/icons/${item.icon}.png`}
-          alt={item.title}
-          className="h-16 mb-3 opacity-90"
-        />
-
-        <div className="h-1 w-8 bg-orange-400 rounded-full mb-3" />
-
-        <h3 className="font-semibold text-xl text-gray-900">
+        <h3 className="text-2xl font-semibold text-gray-900">
           {item.title}
         </h3>
 
-        <p className="text-gray-600 mt-2 text-sm leading-relaxed">
+        <div className="h-1 w-12 bg-orange-400 rounded-full mx-auto my-4" />
+
+        <p className="text-gray-600 text-sm leading-relaxed">
           {item.text}
         </p>
       </div>
     ))}
+
   </div>
 </section>
+
+
 
 
 
