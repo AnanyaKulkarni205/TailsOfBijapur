@@ -22,6 +22,7 @@ export default function Adopt() {
   const [error, setError] = useState(null)
   
   const [approvedPuppies, setApprovedPuppies] = useState([]);
+  const [selectedPuppy, setSelectedPuppy] = useState(null);
   const fileInputRef = useRef(null)
 
 
@@ -107,6 +108,28 @@ useEffect(() => {
   .then(data => setApprovedPuppies(data));
 
 }, []);
+
+// Close modal on ESC
+useEffect(() => {
+  const handleEsc = (e) => {
+    if (e.key === "Escape") {
+      setSelectedPuppy(null);
+    }
+  };
+
+  window.addEventListener("keydown", handleEsc);
+  return () => window.removeEventListener("keydown", handleEsc);
+}, []);
+
+// Prevent background scroll
+useEffect(() => {
+  if (selectedPuppy) {
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "auto";
+  }
+}, [selectedPuppy]);
+
 
 
   return (
@@ -203,7 +226,7 @@ useEffect(() => {
 
             <fieldset className="mb-3">
               <legend className="sr-only">Photo upload</legend>
-              <label className="block text-sm font-medium text-gray-700">Photo <span className="text-xs text-gray-500">(required)</span></label>
+              <label className="block text-sm font-medium text-gray-700">Photo of the Puppy <span className="text-xs text-gray-500">(required)</span></label>
               <input
                 ref={fileInputRef}
                 aria-describedby="photo-help"
@@ -222,12 +245,12 @@ useEffect(() => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Name (optional)</label>
+                <label className="block text-sm font-medium text-gray-700">Reporter Name </label>
                 <input id="name" name="name" value={form.name} onChange={handleChange} className="mt-2 w-full border border-gray-300 p-2.5 rounded-md focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-300" />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Age (optional)</label>
+                <label className="block text-sm font-medium text-gray-700">Age of the Puppy</label>
                 <input id="age" name="age" value={form.age} onChange={handleChange} className="mt-2 w-full border border-gray-300 p-2.5 rounded-md focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-300" />
               </div>
             </div>
@@ -252,7 +275,7 @@ useEffect(() => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Contact number</label>
+                <label className="block text-sm font-medium text-gray-700">Reporter Contact Number</label>
                 <input id="phone" name="phone" value={form.phone} onChange={handleChange} className="mt-2 w-full border border-gray-300 p-2.5 rounded-md focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-300" placeholder="e.g., +919812345678" required />
               </div>
             </div>
@@ -283,50 +306,139 @@ useEffect(() => {
           </form>
         </div>
 
-        {/* Placeholder: Approved adoptable puppies will appear below */}
-        {/* Approved Puppies Section */}
-        <div className="mt-12" id="approved">
-          <h3 className="text-lg font-semibold mb-3">Approved Puppies</h3>
+    {/* Placeholder: Approved adoptable puppies will appear below */}
+    {/* Approved Puppies */}
+<div className="mt-16" id="approved">
+  <h3 className="text-2xl font-semibold text-gray-900 mb-6">
+    Approved Puppies
+  </h3>
 
-          {/* Approved Puppies Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-            {approvedPuppies.map((puppy) => (
-              <div key={puppy._id} className="border p-4 rounded shadow bg-white">
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    {approvedPuppies.map((puppy) => (
+      <div
+        key={puppy._id}
+        onClick={() => setSelectedPuppy(puppy)}
+        className="cursor-pointer bg-white border border-[#E7E1D8] rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition group"
+      >
+        {puppy.imageUrl && (
+          <div className="w-full aspect-[4/3] overflow-hidden">
+            <img
+              src={puppy.imageUrl}
+              alt={puppy.name}
+              className="w-full h-full object-cover transition duration-300 group-hover:scale-105"
+            />
+          </div>
+        )}
+      </div>
+    ))}
+  </div>
 
-                {puppy.imageUrl && (
-                      <img
-                        src={puppy.imageUrl}
-                        alt={puppy.name}
-                        className="w-full h-48 object-cover rounded"
-                      />
-                    )}
+  {approvedPuppies.length === 0 && (
+    <div className="text-center text-gray-600 py-12 border border-dashed rounded-lg bg-white mt-6">
+      No approved listings yet — be the first to{" "}
+      <a href="#submit" className="text-orange-500 underline">
+        Submit a puppy
+      </a>.
+    </div>
+  )}
+
+  <p className="text-sm text-gray-500 mt-6">
+    Click on a puppy to view full details.
+  </p>
+</div>
 
 
-                <h3 className="text-xl font-semibold mt-2">
-                  {puppy.name || "Unnamed Puppy"}
-                </h3>
+    {selectedPuppy && (
+  <div
+    className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+    onClick={(e) => {
+      if (e.target === e.currentTarget) setSelectedPuppy(null);
+    }}
+  >
+    <div className="bg-white border border-[#E7E1D8] rounded-2xl max-w-xl w-full shadow-lg relative overflow-hidden">
 
-                <p><strong>Age:</strong> {puppy.age || "Not specified"}</p>
-                <p><strong>Gender:</strong> {puppy.gender || "Not specified"}</p>
-                <p><strong>Location:</strong> {puppy.location}</p>
-              </div>
-            ))}
+      {/* Close Button */}
+      <button
+        onClick={() => setSelectedPuppy(null)}
+        className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-lg"
+      >
+        ✕
+      </button>
+
+      {/* Image */}
+      {selectedPuppy.imageUrl && (
+        <div className="w-full aspect-[4/3] bg-gray-100">
+          <img
+            src={selectedPuppy.imageUrl}
+            alt={selectedPuppy.name}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
+
+      {/* Content */}
+      <div className="p-6">
+
+        <h2 className="text-2xl font-semibold text-gray-900">
+          {selectedPuppy.name || "Unnamed Puppy"}
+        </h2>
+
+        <div className="mt-4 space-y-2 text-sm text-gray-700">
+          <div className="flex justify-between border-b border-gray-100 pb-2">
+            <span className="text-gray-500">Age</span>
+            <span>{selectedPuppy.age || "Not specified"}</span>
           </div>
 
-          {/* Show message only if empty */}
-          {approvedPuppies.length === 0 && (
-            <div className="text-center text-gray-600 py-12 border border-dashed rounded-lg bg-white mt-6">
-              No approved listings yet — be the first to{" "}
-              <a href="#submit" className="text-orange-500 underline">
-                submit a puppy
-              </a>.
-            </div>
-          )}
+          <div className="flex justify-between border-b border-gray-100 pb-2">
+            <span className="text-gray-500">Gender</span>
+            <span>{selectedPuppy.gender || "Not specified"}</span>
+          </div>
 
-          <p className="text-sm text-gray-500 mt-6">
-            After review, approved listings will be displayed here so adopters can reach out directly.
-          </p>
+          <div className="flex justify-between border-b border-gray-100 pb-2">
+            <span className="text-gray-500">Vaccination</span>
+            <span>{selectedPuppy.vaccinated || "Unknown"}</span>
+          </div>
+
+          <div className="flex justify-between">
+            <span className="text-gray-500">Location</span>
+            <span>{selectedPuppy.location}</span>
+          </div>
         </div>
+
+        {selectedPuppy.description && (
+          <div className="mt-5 pt-4 border-t border-gray-100">
+            <p className="text-sm text-gray-600 leading-relaxed">
+              {selectedPuppy.description}
+            </p>
+          </div>
+        )}
+
+        {/* Action Buttons */}
+        <div className="mt-6 flex gap-3">
+          <a
+            href={`tel:${selectedPuppy.phone}`}
+            className="flex-1 text-center bg-[#C2410C] hover:bg-[#9A3412] text-white py-3 rounded-lg text-sm font-medium transition"
+          >
+            Call
+          </a>
+
+          <a
+            href={`https://wa.me/${selectedPuppy.phone}?text=Hi,%20I'm%20interested%20in%20adopting%20${selectedPuppy.name || "this puppy"}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 text-center border border-[#C2410C] text-[#C2410C] hover:bg-orange-50 py-3 rounded-lg text-sm font-medium transition"
+          >
+            WhatsApp
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+)}
+
+
+
 
       </div>
     </div>
