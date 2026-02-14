@@ -14,7 +14,8 @@ import WhyAdopt from './pages/WhyAdopt'
 import Doctors from "./pages/Doctors"
 import Indies from './pages/Indies'
 import Admin from './pages/Admin'
-import AdminLogin from './pages/AdminLogin';
+import AdminLogin from './pages/AdminLogin'
+import Awareness from './pages/Awareness';
 
 
 
@@ -35,6 +36,7 @@ function App() {
           <Route path="indies" element={<Indies />} />
           <Route path="admin" element={<Admin />} />
           <Route path="admin-login" element={<AdminLogin />} />
+          <Route path="awareness" element={<Awareness />} />
           {/* <Route path="donate" element={<Donate />} /> */}
         </Route>
       </Routes>
