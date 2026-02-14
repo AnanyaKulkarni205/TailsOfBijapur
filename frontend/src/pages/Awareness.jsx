@@ -2,104 +2,159 @@ import React from "react";
 
 const Awareness = () => {
   return (
-    <section className="max-w-6xl mx-auto px-6 py-16">
-      {/* Header */}
-      <div className="text-center mb-14">
-        <h1 className="text-3xl sm:text-4xl font-semibold text-[#1F2933]">
-          Animal Health & Community Awareness
-        </h1>
+    <div className="bg-[#FAF7F2]">
 
-        <p className="mt-4 text-[#4B5563] max-w-2xl mx-auto leading-relaxed">
-          Protecting street animals through vaccination, responsible feeding,
-          and community cooperation creates a safer and healthier Vijayapura
-          for both animals and people.
+      {/* HERO */}
+      <section className="max-w-6xl mx-auto px-6 py-24 text-center">
+
+
+        <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight">
+            Building a Healthier{" "}
+            <span className="text-orange-500">Safer Community</span>
+          </h1>  
+
+        <p className="mt-6 text-[#4B5563] max-w-3xl mx-auto leading-relaxed">
+          Through vaccination, responsible feeding, and public awareness,
+          we can protect both animals and people while creating harmony
+          within our neighborhoods.
         </p>
-      </div>
+      </section>
 
-      {/* Vaccination Section */}
-      <div className="bg-white rounded-2xl p-8 shadow-sm border mb-12">
-        <h2 className="text-2xl font-semibold text-[#C2410C]">
-          Importance of Vaccination
-        </h2>
+      {/* VACCINATION SECTION */}
+      <section className="bg-white py-20">
+        <div className="max-w-6xl mx-auto px-6">
+          <h2 className="text-3xl font-semibold text-center text-[#C2410C] mb-14">
+            Importance of Vaccination
+          </h2>
 
-        <div className="mt-6 space-y-6 text-[#4B5563] text-sm leading-relaxed">
-          <div>
-            <h3 className="font-semibold text-[#1F2933]">
-              Anti-Rabies Vaccine
-            </h3>
-            <p>
-              Rabies is a fatal but preventable viral disease. Vaccinating
-              street and pet dogs protects both animals and humans. Regular
-              anti-rabies vaccination significantly reduces the risk of
-              transmission and helps maintain public safety.
-            </p>
-          </div>
+          <div className="grid md:grid-cols-2 gap-12">
 
-          <div>
-            <h3 className="font-semibold text-[#1F2933]">
-              DHPPi (9-in-1) Vaccine
-            </h3>
-            <p>
-              The DHPPi 9-in-1 vaccine protects dogs against multiple serious
-              diseases such as Distemper, Parvovirus, Hepatitis, Parainfluenza,
-              and Leptospirosis. These diseases can be deadly, especially for
-              puppies and unvaccinated dogs.
-            </p>
-            <p className="mt-2">
-              Regular vaccination improves immunity, reduces outbreaks, and
-              promotes a healthier stray population.
-            </p>
+            <div className="p-8 rounded-2xl border hover:shadow-md transition">
+              <h3 className="text-xl font-semibold text-[#1F2933] mb-4">
+                Anti-Rabies Vaccine
+              </h3>
+              <p className="text-[#4B5563] text-sm leading-relaxed">
+                Rabies is 100% preventable through vaccination. Immunizing
+                street and pet dogs protects the entire community and reduces
+                the risk of fatal transmission.
+              </p>
+            </div>
+
+            <div className="p-8 rounded-2xl border hover:shadow-md transition">
+              <h3 className="text-xl font-semibold text-[#1F2933] mb-4">
+                DHPPi (9-in-1) Vaccine
+              </h3>
+              <p className="text-[#4B5563] text-sm leading-relaxed">
+                Protects dogs from life-threatening diseases like Distemper,
+                Parvovirus, Hepatitis, and Leptospirosis. Regular vaccination
+                improves immunity and prevents outbreaks.
+              </p>
+            </div>
+
           </div>
         </div>
+      </section>
+
+
+      {/* OUR IMPACT SECTION */}
+<section className="bg-[#FAF7F2] py-20">
+  <div className="max-w-6xl mx-auto px-6">
+
+    <div className="text-center mb-14">
+      <h2 className="text-3xl font-semibold text-[#1F2933]">
+        What We Have Achieved So Far
+      </h2>
+
+      <p className="mt-4 text-[#4B5563] max-w-3xl mx-auto leading-relaxed">
+        For the first time in Vijayapura, Tails of Bijapur initiated 
+        organized mass vaccination drives for community dogs. 
+      </p>
+
+       <p className="mt-4 text-[#4B5563] max-w-3xl mx-auto leading-relaxed"> 
+        Many street dogs remain unvaccinated simply due to lack of 
+        awareness and access not neglect. We wanted to change that.
+
+        Through coordinated efforts, veterinary collaboration, and 
+        volunteer participation.
+        We have conducted two vaccination 
+        drives so far, protecting over 100+ community dogs with both 
+        Anti-Rabies and DHPPi (9-in-1) vaccines.
+
+        These drives are not just medical campaigns,they are steps 
+        toward long-term public safety, disease prevention, and 
+        compassionate coexistence.
+    </p>
+</div>
+
+
+    {/* Photo Placeholder Section */}
+    <div className="grid md:grid-cols-3 gap-6">
+      <div className="bg-white h-64 rounded-2xl flex items-center justify-center border text-[#9CA3AF]">
+        Vaccination Drive Image 1
       </div>
+      <div className="bg-white h-64 rounded-2xl flex items-center justify-center border text-[#9CA3AF]">
+        Vaccination Drive Image 2
+      </div>
+      <div className="bg-white h-64 rounded-2xl flex items-center justify-center border text-[#9CA3AF]">
+        Vaccination Drive Image 3
+      </div>
+    </div>
 
-      {/* Feeding Section */}
-      <div className="bg-white rounded-2xl p-8 shadow-sm border mb-12">
-        <h2 className="text-2xl font-semibold text-[#C2410C]">
-        Responsible Feeding & Creating Feeding Points
-        </h2>
+  </div>
+</section>
 
-        <div className="mt-6 space-y-4 text-[#4B5563] text-sm leading-relaxed">
-          <p>
-            Feeding street dogs is an act of compassion. However, it should be
-            done responsibly to avoid conflict and maintain cleanliness.
+
+      {/* FEEDING SECTION */}
+      <section className="py-20">
+        <div className="max-w-5xl mx-auto px-6 text-center">
+          <h2 className="text-3xl font-semibold text-[#C2410C] mb-8">
+            Responsible Feeding & Feeding Points
+          </h2>
+
+          <p className="text-[#4B5563] leading-relaxed mb-10 max-w-3xl mx-auto">
+            Feeding street dogs should be structured and hygienic to maintain
+            peace within the community while ensuring animals receive proper care.
           </p>
 
-          <ul className="list-disc pl-6 space-y-2">
-            <li>Choose fixed feeding locations away from traffic.</li>
-            <li>Maintain cleanliness after feeding.</li>
-            <li>Provide fresh water along with food.</li>
-            <li>Avoid overcrowding residential entrances.</li>
-            <li>Coordinate with local residents for mutual understanding.</li>
-          </ul>
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 text-left">
+            {[
+              "Choose fixed feeding locations away from traffic",
+              "Maintain cleanliness after feeding",
+              "Provide fresh water daily",
+              "Avoid blocking entrances or public pathways",
+              "Coordinate respectfully with residents",
+              "Keep feeding timings consistent",
+            ].map((item, index) => (
+              <div
+                key={index}
+                className="bg-white p-6 rounded-xl shadow-sm border"
+              >
+                <p className="text-sm text-[#4B5563] leading-relaxed">
+                  {item}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-          <p className="mt-4">
-            Creating designated feeding points helps reduce aggression, keeps
-            dogs settled in one area, and builds trust between the community
-            and animals.
+      {/* SAFE ENVIRONMENT CTA */}
+      <section className="bg-[#1F2933] py-20 text-white text-center">
+        <div className="max-w-4xl mx-auto px-6">
+          <h2 className="text-3xl font-semibold mb-6">
+            Creating a Safe Environment for Everyone
+          </h2>
+
+          <p className="text-sm leading-relaxed text-gray-300">
+            Vaccinated, sterilized, and properly fed dogs are healthier,
+            calmer, and less aggressive. Awareness and humane treatment
+            reduce dog bites, prevent disease spread, and build trust
+            between humans and animals.
           </p>
         </div>
-      </div>
+      </section>
 
-      {/* Safe Environment Section */}
-      <div className="bg-[#FAF7F2] rounded-2xl p-10 text-center">
-        <h2 className="text-2xl font-semibold text-[#1F2933]">
-          🏘️ Creating a Safe Environment for Everyone
-        </h2>
-
-        <p className="mt-4 text-[#4B5563] max-w-3xl mx-auto leading-relaxed text-sm">
-          A vaccinated, sterilized, and regularly fed dog is less aggressive,
-          healthier, and more protective of its territory. Community awareness,
-          cooperation, and humane treatment reduce dog bites, disease spread,
-          and unnecessary fear.
-        </p>
-
-        <p className="mt-4 text-[#4B5563] max-w-3xl mx-auto leading-relaxed text-sm">
-          Compassion and responsibility together build harmony between humans
-          and animals.
-        </p>
-      </div>
-    </section>
+    </div>
   );
 };
 
