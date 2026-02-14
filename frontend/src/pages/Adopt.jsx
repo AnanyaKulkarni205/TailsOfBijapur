@@ -313,6 +313,17 @@ useEffect(() => {
     Approved Puppies
   </h3>
 
+  {/* <p className="text-sm text-gray-600 mb-10 max-w-2xl">
+  These puppies are looking for loving homes. All listings are verified to ensure a safe and responsible adoption process.
+  </p> */}
+
+  <div className="mb-6">
+  <p className="text-1xl sm:text-1xl font-semibold text-gray-900 leading-tight">
+  These puppies are looking for loving homes.{" "}
+  <span className="text-orange-500">All listings are verified to ensure a safe and responsible adoption process.</span></p>
+  </div>
+
+
   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
     {approvedPuppies.map((puppy) => (
       <div
