@@ -8,33 +8,35 @@ export default function AdminLogin() {
   const navigate = useNavigate();
 
   async function handleLogin(e) {
-    e.preventDefault();
-    setError("");
+  e.preventDefault();
 
-    try {
-      const res = await fetch("http://localhost:4000/api/admin/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+  try {
+    const res = await fetch("http://localhost:4000/api/admin/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    });
 
-      const data = await res.json();
+    const data = await res.json();
 
-      if (!res.ok) {
-        setError(data.error || "Login failed");
-        return;
-      }
-
-      // Save token
-      localStorage.setItem("adminToken", data.token);
-
-      // Redirect to admin dashboard
-      navigate("/admin");
-
-    } catch (err) {
-      setError("Server error. Try again.");
+    if (!res.ok) {
+      alert(data.error || "Login failed");
+      return;
     }
+
+    localStorage.setItem("adminToken", data.token);
+    navigate("/admin");
+  } catch (err) {
+    console.error("Login error:", err);
+    alert("Server error. Check backend.");
   }
+}
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">

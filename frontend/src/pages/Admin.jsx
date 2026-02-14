@@ -61,9 +61,10 @@ export default function Admin() {
   }
 
   async function updateAdoption(id, status) {
-    const token = localStorage.getItem("adminToken");
+  const token = localStorage.getItem("adminToken");
 
-    await fetch(`/api/admin/adoptions/${id}`, {
+  try {
+    const res = await fetch(`/api/admin/adoptions/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -72,8 +73,21 @@ export default function Admin() {
       body: JSON.stringify({ status }),
     });
 
-    fetchAdoptions(token);
+    if (!res.ok) {
+      alert("Failed to update adoption status");
+      return;
+    }
+
+    setAdoptions((prev) =>
+      prev.map((item) =>
+        item._id === id ? { ...item, status } : item
+      )
+    );
+  } catch (err) {
+    console.error(err);
   }
+}
+
 
   async function updateVolunteer(id, status) {
     const token = localStorage.getItem("adminToken");
@@ -115,11 +129,12 @@ export default function Admin() {
           <div key={item._id} className="bg-white p-5 rounded shadow">
           {item.image && (
             <img
-              src={item.image}
+              src={`http://localhost:4000/uploads/${item.image}`}
               alt="Puppy"
               className="w-40 h-40 object-cover rounded mb-4"
             />
           )}
+
             <p><strong>Name:</strong> {item.name}</p>
             <p><strong>Email:</strong> {item.email}</p>
             <p><strong>Location:</strong> {item.location}</p>

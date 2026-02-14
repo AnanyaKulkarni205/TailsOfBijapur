@@ -11,9 +11,10 @@ const adoptionSchema = new mongoose.Schema({
     image: String,
     status: {
         type: String,
-        enum: ['pending', 'approved', 'rejected'],
-        default: 'pending'
-    }
+        enum: ["PENDING", "APPROVED", "REJECTED"],
+        default: "PENDING"
+}
+
 }, { timestamps: true })
 
 module.exports = mongoose.model('Adoption', adoptionSchema)

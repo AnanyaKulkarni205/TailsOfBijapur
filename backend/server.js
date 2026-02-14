@@ -13,8 +13,11 @@ const multer = require("multer");
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use("/uploads", express.static("uploads"));
+
 
 const PORT = process.env.PORT || 4000;
+const jwt = require("jsonwebtoken");
 
 /* ==============================
    MongoDB Connection
@@ -299,6 +302,98 @@ Thank you for supporting Tails of Bijapur
         res.status(500).json({ error: "Failed to update status" });
     }
 });
+
+
+/* ==============================
+   Admin Login
+============================== */
+app.post("/api/admin/login", (req, res) => {
+  const { email, password } = req.body;
+
+  // Simple hardcoded admin (for now)
+  if (
+    email === process.env.ADMIN_EMAIL &&
+    password === process.env.ADMIN_PASSWORD
+  ) {
+    const token = jwt.sign(
+      { role: "admin" },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    return res.json({ token });
+  }
+
+  res.status(401).json({ error: "Invalid credentials" });
+});
+
+
+function verifyAdmin(req, res, next) {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  const token = authHeader.split(" ")[1];
+
+  try {
+    jwt.verify(token, process.env.JWT_SECRET);
+    next();
+  } catch {
+    res.status(401).json({ error: "Invalid token" });
+  }
+}
+
+
+/* ==============================
+   Admin - Get All Adoptions
+============================== */
+app.get("/api/admin/adoptions", verifyAdmin, async (req, res) => {
+
+  try {
+    const adoptions = await Adoption.find().sort({ createdAt: -1 });
+    res.json(adoptions);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch adoptions" });
+  }
+});
+
+/* ==============================
+   Admin - Update Adoption Status
+============================== */
+app.patch("/api/admin/adoptions/:id", verifyAdmin, async (req, res) => {
+  try {
+    const { status } = req.body;
+
+    const updated = await Adoption.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true }
+    );
+
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to update status" });
+  }
+});
+
+
+
+/* ==============================
+   Get Approved Puppies
+============================== */
+app.get("/api/approved-puppies", async (req, res) => {
+    try {
+        const approved = await Adoption.find({ status: "APPROVED" })
+                                       .sort({ createdAt: -1 });
+
+        res.json(approved);
+    } catch (err) {
+        res.status(500).json({ error: "Failed to fetch approved puppies" });
+    }
+});
+
 
 /* ==============================
    Server Start

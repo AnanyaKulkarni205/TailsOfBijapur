@@ -1,4 +1,6 @@
-import React, { useState, useRef } from 'react'
+
+import React, { useEffect, useState , useRef} from "react";
+
 import { useNavigate } from 'react-router-dom'
 
 export default function Adopt() {
@@ -18,7 +20,11 @@ export default function Adopt() {
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState(null)
   const [error, setError] = useState(null)
+  
+  const [approvedPuppies, setApprovedPuppies] = useState([]);
   const fileInputRef = useRef(null)
+
+
 
   function handleChange(e) {
     const { name, value } = e.target
@@ -91,6 +97,12 @@ export default function Adopt() {
       setSubmitting(false)
     }
   }
+useEffect(() => {
+  fetch("http://localhost:4000/api/approved-puppies")
+    .then(res => res.json())
+    .then(data => setApprovedPuppies(data))
+    .catch(err => console.error(err));
+}, []);
 
   return (
     <div className="bg-[#FAF7F2]">
@@ -267,14 +279,49 @@ export default function Adopt() {
         </div>
 
         {/* Placeholder: Approved adoptable puppies will appear below */}
+        {/* Approved Puppies Section */}
         <div className="mt-12" id="approved">
           <h3 className="text-lg font-semibold mb-3">Approved Puppies</h3>
-          <p className="text-sm text-gray-500 mb-6">After review, approved listings will be displayed here so adopters can reach out directly.</p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="col-span-full text-center text-gray-600 py-12 border border-dashed rounded-lg bg-white">No approved listings yet — be the first to <a href="#submit" className="text-orange-500 underline">submit a puppy</a>.</div>
+          {/* Approved Puppies Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+            {approvedPuppies.map((puppy) => (
+              <div key={puppy._id} className="border p-4 rounded shadow bg-white">
+
+                {puppy.image && (
+                  <img
+                    src={`http://localhost:4000/uploads/${puppy.image}`}
+                    alt={puppy.name}
+                    className="w-full h-48 object-cover rounded"
+                  />
+                )}
+
+                <h3 className="text-xl font-semibold mt-2">
+                  {puppy.name || "Unnamed Puppy"}
+                </h3>
+
+                <p><strong>Age:</strong> {puppy.age || "Not specified"}</p>
+                <p><strong>Gender:</strong> {puppy.gender || "Not specified"}</p>
+                <p><strong>Location:</strong> {puppy.location}</p>
+              </div>
+            ))}
           </div>
+
+          {/* Show message only if empty */}
+          {approvedPuppies.length === 0 && (
+            <div className="text-center text-gray-600 py-12 border border-dashed rounded-lg bg-white mt-6">
+              No approved listings yet — be the first to{" "}
+              <a href="#submit" className="text-orange-500 underline">
+                submit a puppy
+              </a>.
+            </div>
+          )}
+
+          <p className="text-sm text-gray-500 mt-6">
+            After review, approved listings will be displayed here so adopters can reach out directly.
+          </p>
         </div>
+
       </div>
     </div>
   )
