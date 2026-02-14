@@ -34,6 +34,7 @@ const Nav = () => {
           <NavLink to="/about" className={linkClass}>About</NavLink>
           <NavLink to="/adopt" className={linkClass}>Adopt</NavLink>
           <NavLink to="/volunteer" className={linkClass}>Volunteer</NavLink>
+          <NavLink to="/awareness" className={linkClass}>Awareness</NavLink>
           {/*<NavLink to="/surrender" className={linkClass}>Rescue</NavLink> */}
           <NavLink to="/contact" className={linkClass}>Contact</NavLink>
           <NavLink to="/doctors" className={linkClass}>Veterinary Support</NavLink>
@@ -59,7 +60,7 @@ const Nav = () => {
       {/* Mobile menu */}
       {open && (
         <div className="md:hidden bg-[#FAF7F2] border-t border-[#E7E1D8] px-6 py-4 space-y-4 text-sm">
-          {["About","Adopt","Volunteer","Rescue","Contact","Veterinary Support"].map((item) => (
+          {["About","Adopt","Volunteer","Awareness","Contact","Veterinary Support"].map((item) => (
             <NavLink
               key={item}
               to={`/${item.toLowerCase().replace(" ", "-")}`}
