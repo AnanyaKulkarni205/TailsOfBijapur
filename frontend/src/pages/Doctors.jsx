@@ -43,7 +43,7 @@ const Doctors = () => {
 
         <p className="mt-4 text-[#4B5563] max-w-2xl mx-auto leading-relaxed">
           Verified veterinary professionals who support animal rescue,
-          emergency care, and on-spot treatment in and around Vijayapura.
+          emergency care in and around Vijayapura.
         </p>
 
         {/* View all map CTA */}
