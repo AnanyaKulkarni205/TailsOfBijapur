@@ -11,6 +11,7 @@ export default function Adopt() {
     gender: 'Female',
     vaccinated: 'Unknown',
     location: '',
+    reportername: '',
     phone: '',
     description: '',
   })
@@ -72,6 +73,7 @@ export default function Adopt() {
       payload.append('gender', form.gender)
       payload.append('vaccinated', form.vaccinated)
       payload.append('location', form.location)
+      payload.append('reportername', form.reportername)
       payload.append('phone', normalizePhone(form.phone))
       payload.append('description', form.description)
       payload.append('image', imageFile)
@@ -91,8 +93,8 @@ export default function Adopt() {
 
 
 
-      setSuccess('Thanks — your submission has been received and will be reviewed. We will email you once it is approved.')
-      setForm({ name: '', age: '', gender: 'Female', vaccinated: 'Unknown', location: '', phone: '', description: '' })
+      setSuccess('Thanks your submission has been received and will be reviewed. We will email you once it is approved.')
+      setForm({ name: '', age: '', gender: 'Female', vaccinated: 'Unknown', location: '', reportername: '', phone: '', description: '' })
       setImageFile(null)
       setPreview(null)
       if (fileInputRef.current) fileInputRef.current.value = ''
@@ -180,7 +182,7 @@ useEffect(() => {
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-green-600">✔️</span>
-                  Privacy respected — contact shared only after approval
+                  Privacy respected and contact shared only after approval
                 </li>
               </ul>
 
@@ -245,7 +247,7 @@ useEffect(() => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Reporter Name </label>
+                <label className="block text-sm font-medium text-gray-700">Name of the Puppy</label>
                 <input id="name" name="name" value={form.name} onChange={handleChange} className="mt-2 w-full border border-gray-300 p-2.5 rounded-md focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-300" />
               </div>
 
@@ -273,16 +275,25 @@ useEffect(() => {
                   <option>Unknown</option>
                 </select>
               </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Reporter Contact Number</label>
-                <input id="phone" name="phone" value={form.phone} onChange={handleChange} className="mt-2 w-full border border-gray-300 p-2.5 rounded-md focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-300" placeholder="e.g., +919812345678" required />
-              </div>
             </div>
 
+            <div className="mb-3">
+            <label className="block mb-4 mt-4 text-sm font-medium text-gray-700">Reporter Name</label>
+            <input id="reportername" name="reportername" value={form.reportername} onChange={handleChange} className="w-full border border-gray-300 p-2.5 rounded-md mt-1 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-300" placeholder="Your name" />
+            </div>
+
+            <div className="mb-3">
             <label className="block mb-4 text-sm font-medium text-gray-700">Location</label>
             <input id="location" name="location" value={form.location} onChange={handleChange} className="w-full border border-gray-300 p-2.5 rounded-md mt-1 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-300" placeholder="City or area (e.g., Bijapur)" required />
+            </div>
 
+            <div className="mb-3">
+            <label className="block text-sm font-medium text-gray-700">Reporter Contact Number</label>
+            <input id="phone" name="phone" value={form.phone} onChange={handleChange} className="mt-2 w-full border border-gray-300 p-2.5 rounded-md focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-300" placeholder="e.g., +919812345678" required />
+            </div>
+          
+            
+            
             <label className="block mb-4">
               <span className="text-sm font-medium text-gray-700">Notes (optional)</span>
               <textarea id="description" name="description" value={form.description} onChange={handleChange} className="mt-2 w-full border border-gray-300 p-2.5 rounded-md focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-300" rows={4} />
@@ -308,140 +319,141 @@ useEffect(() => {
 
     {/* Placeholder: Approved adoptable puppies will appear below */}
     {/* Approved Puppies */}
-<div className="mt-16" id="approved">
-  <h3 className="text-2xl font-semibold text-gray-900 mb-6">
-    Approved Puppies
-  </h3>
+  <div className="mt-16" id="approved">
+    <h3 className="text-2xl font-semibold text-gray-900 mb-6">
+      Approved Puppies
+    </h3>
 
-  {/* <p className="text-sm text-gray-600 mb-10 max-w-2xl">
-  These puppies are looking for loving homes. All listings are verified to ensure a safe and responsible adoption process.
-  </p> */}
+    <div className="mb-6">
+    <p className="text-1xl sm:text-1xl font-semibold text-gray-900 leading-tight">
+    These puppies are looking for loving homes.{" "}
+    <span className="text-orange-500">All listings are verified to ensure a safe and responsible adoption process.</span></p>
+    </div>
 
-  <div className="mb-6">
-  <p className="text-1xl sm:text-1xl font-semibold text-gray-900 leading-tight">
-  These puppies are looking for loving homes.{" "}
-  <span className="text-orange-500">All listings are verified to ensure a safe and responsible adoption process.</span></p>
+
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {approvedPuppies.map((puppy) => (
+        <div
+          key={puppy._id}
+          onClick={() => setSelectedPuppy(puppy)}
+          className="cursor-pointer bg-white border border-[#E7E1D8] rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition group"
+        >
+          {puppy.imageUrl && (
+            <div className="w-full aspect-[4/3] overflow-hidden">
+              <img
+                src={puppy.imageUrl}
+                alt={puppy.name}
+                className="w-full h-full object-cover transition duration-300 group-hover:scale-105"
+              />
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+
+    {approvedPuppies.length === 0 && (
+      <div className="text-center text-gray-600 py-12 border border-dashed rounded-lg bg-white mt-6">
+        No approved listings yet — be the first to{" "}
+        <a href="#submit" className="text-orange-500 underline">
+          Submit a puppy
+        </a>.
+      </div>
+    )}
+
+    <p className="text-sm text-gray-500 mt-6">
+      Click on a puppy to view full details.
+    </p>
   </div>
 
 
-  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-    {approvedPuppies.map((puppy) => (
-      <div
-        key={puppy._id}
-        onClick={() => setSelectedPuppy(puppy)}
-        className="cursor-pointer bg-white border border-[#E7E1D8] rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition group"
-      >
-        {puppy.imageUrl && (
-          <div className="w-full aspect-[4/3] overflow-hidden">
+      {selectedPuppy && (
+    <div
+      className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) setSelectedPuppy(null);
+      }}
+    >
+      <div className="bg-white border border-[#E7E1D8] rounded-2xl max-w-xl w-full shadow-lg relative overflow-hidden">
+
+        {/* Close Button */}
+        <button
+          onClick={() => setSelectedPuppy(null)}
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-lg"
+        >
+          ✕
+        </button>
+
+        {/* Image */}
+        {selectedPuppy.imageUrl && (
+          <div className="w-full aspect-[4/3] bg-gray-100">
             <img
-              src={puppy.imageUrl}
-              alt={puppy.name}
-              className="w-full h-full object-cover transition duration-300 group-hover:scale-105"
+              src={selectedPuppy.imageUrl}
+              alt={selectedPuppy.name}
+              className="w-full h-full object-cover"
             />
           </div>
         )}
-      </div>
-    ))}
-  </div>
 
-  {approvedPuppies.length === 0 && (
-    <div className="text-center text-gray-600 py-12 border border-dashed rounded-lg bg-white mt-6">
-      No approved listings yet — be the first to{" "}
-      <a href="#submit" className="text-orange-500 underline">
-        Submit a puppy
-      </a>.
-    </div>
-  )}
+        {/* Content */}
+        <div className="p-6">
 
-  <p className="text-sm text-gray-500 mt-6">
-    Click on a puppy to view full details.
-  </p>
-</div>
+          <h2 className="text-2xl font-semibold text-gray-900">
+            {selectedPuppy.name || "Unnamed Puppy"}
+          </h2>
 
+          <div className="mt-4 space-y-2 text-sm text-gray-700">
+            <div className="flex justify-between border-b border-gray-100 pb-2">
+              <span className="text-gray-500">Age</span>
+              <span>{selectedPuppy.age || "Not specified"}</span>
+            </div>
 
-    {selectedPuppy && (
-  <div
-    className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-    onClick={(e) => {
-      if (e.target === e.currentTarget) setSelectedPuppy(null);
-    }}
-  >
-    <div className="bg-white border border-[#E7E1D8] rounded-2xl max-w-xl w-full shadow-lg relative overflow-hidden">
+            <div className="flex justify-between border-b border-gray-100 pb-2">
+              <span className="text-gray-500">Gender</span>
+              <span>{selectedPuppy.gender || "Not specified"}</span>
+            </div>
 
-      {/* Close Button */}
-      <button
-        onClick={() => setSelectedPuppy(null)}
-        className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-lg"
-      >
-        ✕
-      </button>
+            <div className="flex justify-between border-b border-gray-100 pb-2">
+              <span className="text-gray-500">Vaccination</span>
+              <span>{selectedPuppy.vaccinated || "Unknown"}</span>
+            </div>
 
-      {/* Image */}
-      {selectedPuppy.imageUrl && (
-        <div className="w-full aspect-[4/3] bg-gray-100">
-          <img
-            src={selectedPuppy.imageUrl}
-            alt={selectedPuppy.name}
-            className="w-full h-full object-cover"
-          />
-        </div>
-      )}
-
-      {/* Content */}
-      <div className="p-6">
-
-        <h2 className="text-2xl font-semibold text-gray-900">
-          {selectedPuppy.name || "Unnamed Puppy"}
-        </h2>
-
-        <div className="mt-4 space-y-2 text-sm text-gray-700">
-          <div className="flex justify-between border-b border-gray-100 pb-2">
-            <span className="text-gray-500">Age</span>
-            <span>{selectedPuppy.age || "Not specified"}</span>
+            <div className="flex justify-between">
+              <span className="text-gray-500">Location</span>
+              <span>{selectedPuppy.location}</span>
+            </div>
           </div>
 
-          <div className="flex justify-between border-b border-gray-100 pb-2">
-            <span className="text-gray-500">Gender</span>
-            <span>{selectedPuppy.gender || "Not specified"}</span>
+            <div className="flex justify-between border-b border-gray-100 pb-2">
+              <span className="text-gray-500">Reporter Name</span>
+              <span>{selectedPuppy.reportername || "Not specified"}</span>
+            </div>
+
+          {selectedPuppy.description && (
+            <div className="mt-5 pt-4 border-t border-gray-100">
+              <p className="text-sm text-gray-600 leading-relaxed">
+                {selectedPuppy.description}
+              </p>
+            </div>
+          )}
+
+          {/* Action Buttons */}
+          <div className="mt-6 flex gap-3">
+            <a
+              href={`tel:${selectedPuppy.phone}`}
+              className="flex-1 text-center bg-[#C2410C] hover:bg-[#9A3412] text-white py-3 rounded-lg text-sm font-medium transition"
+            >
+              Call
+            </a>
+
+            <a
+              href={`https://wa.me/${selectedPuppy.phone}?text=Hi,%20I'm%20interested%20in%20adopting%20${selectedPuppy.name || "this puppy"}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 text-center border border-[#C2410C] text-[#C2410C] hover:bg-orange-50 py-3 rounded-lg text-sm font-medium transition"
+            >
+              WhatsApp
+            </a>
           </div>
-
-          <div className="flex justify-between border-b border-gray-100 pb-2">
-            <span className="text-gray-500">Vaccination</span>
-            <span>{selectedPuppy.vaccinated || "Unknown"}</span>
-          </div>
-
-          <div className="flex justify-between">
-            <span className="text-gray-500">Location</span>
-            <span>{selectedPuppy.location}</span>
-          </div>
-        </div>
-
-        {selectedPuppy.description && (
-          <div className="mt-5 pt-4 border-t border-gray-100">
-            <p className="text-sm text-gray-600 leading-relaxed">
-              {selectedPuppy.description}
-            </p>
-          </div>
-        )}
-
-        {/* Action Buttons */}
-        <div className="mt-6 flex gap-3">
-          <a
-            href={`tel:${selectedPuppy.phone}`}
-            className="flex-1 text-center bg-[#C2410C] hover:bg-[#9A3412] text-white py-3 rounded-lg text-sm font-medium transition"
-          >
-            Call
-          </a>
-
-          <a
-            href={`https://wa.me/${selectedPuppy.phone}?text=Hi,%20I'm%20interested%20in%20adopting%20${selectedPuppy.name || "this puppy"}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1 text-center border border-[#C2410C] text-[#C2410C] hover:bg-orange-50 py-3 rounded-lg text-sm font-medium transition"
-          >
-            WhatsApp
-          </a>
-        </div>
 
       </div>
     </div>
