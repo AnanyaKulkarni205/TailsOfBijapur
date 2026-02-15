@@ -142,7 +142,7 @@ export default function Admin() {
           <p><strong>Gender:</strong> {item.gender}</p>
           <p><strong>Vaccinated:</strong> {item.vaccinated}</p>
           <p><strong>Status:</strong> {item.status}</p>
-          <p><strong>Reporter:</strong> {item.reportername}</p>
+          <p><strong>Reporter Name:</strong> {item.reportername}</p>
 
           <div className="mt-3 space-x-3">
             <button
