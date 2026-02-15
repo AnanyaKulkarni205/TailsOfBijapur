@@ -417,15 +417,17 @@ useEffect(() => {
               <span>{selectedPuppy.vaccinated || "Unknown"}</span>
             </div>
 
-            <div className="flex justify-between">
+            <div className="flex justify-between border-b border-gray-100 pb-2">
               <span className="text-gray-500">Location</span>
               <span>{selectedPuppy.location}</span>
             </div>
-          </div>
+          
 
             <div className="flex justify-between border-b border-gray-100 pb-2">
               <span className="text-gray-500">Reporter Name</span>
               <span>{selectedPuppy.reportername || "Not specified"}</span>
+            </div>
+
             </div>
 
           {selectedPuppy.description && (
