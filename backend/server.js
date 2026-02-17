@@ -1,47 +1,47 @@
 require("dotenv").config();
 
-// 🔹 Fix SRV DNS issue
 const dns = require("node:dns");
 dns.setServers(["1.1.1.1"]);
 
 const express = require("express");
 const cors = require("cors");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 const nodemailer = require("nodemailer");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
-
 const multer = require("multer");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
-// const CloudinaryStorage = require("multer-storage-cloudinary");
-
 const cloudinary = require("./config/cloudinary");
 
-const storage = new CloudinaryStorage({ cloudinary: cloudinary, params: { folder: "tails_of_bijapur", allowed_formats: ["jpg", "png", "jpeg"], }, });
-
-
-const upload = multer({ storage });
-
-
-
 const app = express();
-app.use(cors());
-app.use(express.json());
-
 const PORT = process.env.PORT || 4000;
 
+/* ==============================
+   Middleware
+============================== */
 
+app.use(helmet());
+app.use(cors({ origin: process.env.FRONTEND_URL || "*" }));
+app.use(express.json());
+
+const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 5,
+});
 
 /* ==============================
-   MongoDB Connection
+   MongoDB
 ============================== */
-mongoose
-    .connect(process.env.MONGO_URI)
+
+mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("MongoDB Connected"))
-    .catch((err) => console.error("MongoDB Error:", err));
+    .catch(err => console.error("MongoDB Error:", err));
 
 /* ==============================
-   Adoption Schema
+   Schemas
 ============================== */
+
 const adoptionSchema = new mongoose.Schema({
     name: String,
     email: String,
@@ -61,11 +61,6 @@ const adoptionSchema = new mongoose.Schema({
     },
 }, { timestamps: true });
 
-const Adoption = mongoose.model("Adoption", adoptionSchema);
-
-/* ==============================
-   Volunteer Schema
-============================== */
 const volunteerSchema = new mongoose.Schema({
     name: String,
     email: String,
@@ -80,11 +75,27 @@ const volunteerSchema = new mongoose.Schema({
     },
 }, { timestamps: true });
 
+const Adoption = mongoose.model("Adoption", adoptionSchema);
 const Volunteer = mongoose.model("Volunteer", volunteerSchema);
 
 /* ==============================
-   SMTP Transporter
+   Cloudinary Upload
 ============================== */
+
+const storage = new CloudinaryStorage({
+    cloudinary,
+    params: {
+        folder: "tails_of_bijapur",
+        allowed_formats: ["jpg", "png", "jpeg"],
+    },
+});
+
+const upload = multer({ storage });
+
+/* ==============================
+   Email Transport
+============================== */
+
 const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: Number(process.env.SMTP_PORT),
@@ -95,95 +106,45 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-transporter.verify((err) => {
-    if (err) console.error("SMTP ERROR:", err);
-    else console.log("SMTP Ready");
-});
-
 /* ==============================
-   Submit Adoption (Cloudinary)
+   Adoption Submit
 ============================== */
+
 app.post("/api/adopt-submissions", upload.single("image"), async(req, res) => {
     try {
-        const {
-            name,
-            email,
-            age,
-            gender,
-            vaccinated,
-            reportername,
-            location,
-            phone,
-            description,
-        } = req.body;
+        const { location, phone } = req.body;
+        if (!location || !phone)
+            return res.status(400).json({ error: "Missing required fields" });
 
-        if (!location || !phone) {
-            return res.status(400).json({
-                ok: false,
-                error: "Missing required fields",
-            });
-        }
-
-        const newSubmission = new Adoption({
-            name,
-            email,
-            age,
-            gender,
-            vaccinated,
-            reportername,
-            location,
-            phone,
-            description,
-            imageUrl: req.file ? req.file.path : null,
-            public_id: req.file ? req.file.filename : null,
+        const submission = await Adoption.create({
+            ...req.body,
+            imageUrl: req.file ? .path || null,
+            public_id: req.file ? .filename || null,
         });
 
-        await newSubmission.save();
-
-        // 🔹 Send email but don't crash if it fails
-        try {
-            await transporter.sendMail({
-                from: `"Tails of Bijapur" <${process.env.SMTP_USER}>`,
-                to: process.env.ADMIN_EMAIL,
-                subject: `🐾 New Adoption Submission - ${name || "Unknown"}`,
-                text: `New Adoption Submission from ${name}`,
-            });
-        } catch (mailErr) {
-            console.error("Email failed but submission saved:", mailErr.message);
-        }
+        transporter.sendMail({
+            from: `"Tails of Bijapur" <${process.env.SMTP_USER}>`,
+            to: process.env.ADMIN_EMAIL,
+            subject: `🐾 New Adoption - ${submission.name || "Unknown"}`,
+            text: `New submission received.`,
+        }).catch(err => console.error("Email Error:", err.message));
 
         res.json({ ok: true });
 
     } catch (err) {
-        console.error("ADOPTION ERROR:", err.message);
-        res.status(500).json({
-            ok: false,
-            error: err.message,
-        });
+        res.status(500).json({ error: err.message });
     }
 });
 
-
 /* ==============================
-   Submit Volunteer
+   Volunteer Submit
 ============================== */
+
 app.post("/api/volunteer", async(req, res) => {
     try {
-        const { name, email, phone, role, time, why } = req.body;
-
-        const newVolunteer = new Volunteer({
-            name,
-            email,
-            phone,
-            role,
-            time,
-            why,
-        });
-
-        await newVolunteer.save();
+        await Volunteer.create(req.body);
         res.json({ ok: true });
-    } catch (err) {
-        console.error("VOLUNTEER ERROR:", err);
+    } catch {
         res.status(500).json({ error: "Submission failed" });
     }
 });
@@ -191,7 +152,8 @@ app.post("/api/volunteer", async(req, res) => {
 /* ==============================
    Admin Login
 ============================== */
-app.post("/api/admin/login", (req, res) => {
+
+app.post("/api/admin/login", loginLimiter, (req, res) => {
     const { email, password } = req.body;
 
     if (
@@ -211,11 +173,10 @@ app.post("/api/admin/login", (req, res) => {
 /* ==============================
    Admin Middleware
 ============================== */
-function verifyAdmin(req, res, next) {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) return res.status(401).json({ error: "Unauthorized" });
 
-    const token = authHeader.split(" ")[1];
+function verifyAdmin(req, res, next) {
+    const token = req.headers.authorization ? .split(" ")[1];
+    if (!token) return res.status(401).json({ error: "Unauthorized" });
 
     try {
         jwt.verify(token, process.env.JWT_SECRET);
@@ -226,62 +187,72 @@ function verifyAdmin(req, res, next) {
 }
 
 /* ==============================
-   Admin - Get Pending Adoptions
+   Admin Routes
 ============================== */
+
 app.get("/api/admin/pending", verifyAdmin, async(req, res) => {
     try {
-        const adoptions = await Adoption.find({ status: "pending" })
-            .sort({ createdAt: -1 });
+        const data = await Adoption.find({ status: "pending" })
+            .sort({ createdAt: -1 })
+            .lean();
 
-        res.json(adoptions);
-    } catch (err) {
-        res.status(500).json({ error: "Failed to fetch adoptions" });
+        res.json(data);
+    } catch {
+        res.status(500).json({ error: "Failed to fetch" });
     }
 });
 
-/* ==============================
-   Admin - Update Adoption Status
-============================== */
 app.patch("/api/admin/adoptions/:id", verifyAdmin, async(req, res) => {
     try {
         const { status } = req.body;
+
+        if (!["approved", "rejected"].includes(status))
+            return res.status(400).json({ error: "Invalid status" });
 
         const updated = await Adoption.findByIdAndUpdate(
             req.params.id, { status }, { new: true }
         );
 
+        if (!updated)
+            return res.status(404).json({ error: "Record not found" });
+
         if (status === "approved" && updated.email) {
-            await transporter.sendMail({
+            transporter.sendMail({
                 from: `"Tails of Bijapur" <${process.env.SMTP_USER}>`,
                 to: updated.email,
-                subject: "🐾 Your Adoption Submission Has Been Approved!",
+                subject: "🐾 Adoption Approved!",
                 text: `Hello ${updated.name}, your adoption request is approved!`,
-            });
+            }).catch(err => console.error(err.message));
         }
 
         res.json(updated);
-    } catch (err) {
-        res.status(500).json({ error: "Failed to update status" });
+
+    } catch {
+        res.status(500).json({ error: "Update failed" });
     }
 });
 
 /* ==============================
-   Get Approved Puppies
+   Public Approved Puppies
 ============================== */
+
 app.get("/api/approved-puppies", async(req, res) => {
     try {
-        const approved = await Adoption.find({ status: "approved" })
-            .sort({ createdAt: -1 });
+        const data = await Adoption.find({ status: "approved" })
+            .select("name age gender vaccinated description imageUrl reportername")
+            .sort({ createdAt: -1 })
+            .lean();
 
-        res.json(approved);
-    } catch (err) {
-        res.status(500).json({ error: "Failed to fetch approved puppies" });
+        res.json(data);
+    } catch {
+        res.status(500).json({ error: "Failed to fetch" });
     }
 });
 
 /* ==============================
-   Server Start
+   Start Server
 ============================== */
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+
+app.listen(PORT, () =>
+    console.log(`Server running on port ${PORT}`)
+);
