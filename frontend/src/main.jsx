@@ -16,7 +16,7 @@ import Indies from './pages/Indies'
 import Admin from './pages/Admin'
 import AdminLogin from './pages/AdminLogin'
 import Awareness from './pages/Awareness';
-
+import Donate from './pages/Donate';
 
 
 function App() {
@@ -37,7 +37,7 @@ function App() {
           <Route path="admin" element={<Admin />} />
           <Route path="admin-login" element={<AdminLogin />} />
           <Route path="awareness" element={<Awareness />} />
-          {/* <Route path="donate" element={<Donate />} /> */}
+          <Route path="donate" element={<Donate />} />
         </Route>
       </Routes>
     </BrowserRouter>
