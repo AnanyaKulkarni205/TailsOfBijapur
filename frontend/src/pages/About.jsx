@@ -1,7 +1,81 @@
+<<<<<<< HEAD
 import React from "react";
 import { HeartHandshake, Syringe, Megaphone, Globe, ArrowDownRight } from "lucide-react";
 import volunteers from "../data/volunteers.json"; // Make sure this path is correct
+=======
+import React, { useRef, useState, useEffect } from "react";
+import { HeartHandshake, Syringe, Megaphone, Globe, ArrowDownRight } from "lucide-react";
+import volunteers from "../data/volunteers.json"; 
+import { useTextLayout } from "../hooks/useTextLayout"; 
+>>>>>>> 55b3cce07cee20efddc7bb5be5787f03d4a9c773
 
+// ================= TRULY DYNAMIC SMART CARD =================
+function ValueCard({ item }) {
+  const containerRef = useRef(null);
+  const [width, setWidth] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
+  // 1. Observe the exact pixel width of the card continuously
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const observer = new ResizeObserver((entries) => {
+      // Every time the window resizes, update the width instantly
+      setWidth(entries[0].contentRect.width);
+    });
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // 2. Pretext Dynamic Layout
+  // Because 'item.text' never changes, Pretext only runs the heavy "Prepare" phase once.
+  // As 'width' changes during a window resize, it only runs the ultra-fast "Layout" phase.
+  const { height: targetHeight } = useTextLayout(
+    item.text, 
+    "500 16px sans-serif", 
+    width, 
+    24 // Line height
+  );
+
+  return (
+    <div 
+      className="bg-[#F5F5F5] p-10 rounded-[2.5rem] border-2 border-transparent hover:border-black transition-all group relative overflow-hidden flex flex-col justify-start min-h-[220px]"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      
+      <div className="bg-black text-white w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-orange-600 transition-all shadow-xl shrink-0 relative z-10">
+        {item.icon}
+      </div>
+      
+      <h3 className="text-3xl font-black uppercase tracking-tight relative z-10">{item.title}</h3>
+      
+      <div ref={containerRef} className="relative z-10">
+        {/* 3. The Dynamic Reflow Container */}
+        <div 
+          className="overflow-hidden transition-all duration-500 ease-out opacity-0 group-hover:opacity-100"
+          style={{ 
+            // If hovered, use the exact Pretext calculation. If not, snap to 0.
+            // If the window is resized WHILE hovered, this value updates instantly 
+            // and the box smoothly morphs to the new required height.
+            height: isHovered ? `${targetHeight + 16}px` : '0px' 
+          }}
+        >
+          <p className="text-gray-600 font-medium leading-relaxed pt-4">
+            {item.text}
+          </p>
+        </div>
+      </div>
+
+      {/* Decorative background element */}
+      <div className="absolute -bottom-10 -right-10 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none scale-150">
+         {item.icon}
+      </div>
+    </div>
+  );
+}
+
+
+// ================= MAIN COMPONENT =================
 export default function About() {
   return (
     <div className="bg-[#0A0A0A] text-[#F5F5F5] selection:bg-orange-500 selection:text-white pb-24 overflow-x-hidden">
@@ -42,7 +116,11 @@ export default function About() {
         </div>
       </section>
 
+<<<<<<< HEAD
       {/* ================= OUR STORY (Editorial Layout) ================= */}
+=======
+      {/* ================= OUR STORY ================= */}
+>>>>>>> 55b3cce07cee20efddc7bb5be5787f03d4a9c773
       <section className="py-24 px-4 md:px-12 max-w-[1400px] mx-auto border-t border-white/10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
           
@@ -83,7 +161,11 @@ export default function About() {
         </div>
       </section>
 
+<<<<<<< HEAD
       {/* ================= OUR VALUES (Bento Grid) ================= */}
+=======
+      {/* ================= CORE VALUES (Powered by Pretext) ================= */}
+>>>>>>> 55b3cce07cee20efddc7bb5be5787f03d4a9c773
       <section className="py-32 px-4 md:px-12 bg-white text-black rounded-t-[5rem] rounded-b-[5rem]">
         <div className="max-w-[1400px] mx-auto">
           <div className="text-center mb-20">
@@ -98,6 +180,7 @@ export default function About() {
               { icon: <Megaphone size={32} />, title: "Educate", text: "Spreading awareness builds responsible pet care and compassionate neighborhoods." },
               { icon: <Globe size={32} />, title: "Coexist", text: "Humans and animals can live safely together through profound understanding and respect." },
             ].map((item, i) => (
+<<<<<<< HEAD
               <div key={i} className="bg-[#F5F5F5] p-10 rounded-[2.5rem] border-2 border-transparent hover:border-black transition-all group relative overflow-hidden">
                 <div className="bg-black text-white w-16 h-16 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 group-hover:bg-orange-600 transition-all shadow-xl">
                   {item.icon}
@@ -109,12 +192,19 @@ export default function About() {
                    {item.icon}
                 </div>
               </div>
+=======
+              <ValueCard key={i} item={item} /> 
+>>>>>>> 55b3cce07cee20efddc7bb5be5787f03d4a9c773
             ))}
           </div>
         </div>
       </section>
 
       {/* ================= MEET THE TEAM ================= */}
+<<<<<<< HEAD
+=======
+      {/* ================= MEET THE TEAM ================= */}
+>>>>>>> 55b3cce07cee20efddc7bb5be5787f03d4a9c773
       <section id="team-section" className="py-32 px-4 md:px-12 max-w-[1400px] mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
           <div>
@@ -128,6 +218,7 @@ export default function About() {
           </p>
         </div>
 
+<<<<<<< HEAD
         {/* Horizontal Scroll Container */}
         <div className="flex gap-6 overflow-x-auto pb-10 snap-x snap-mandatory hide-scrollbar">
           {volunteers.map((vol, index) => (
@@ -147,6 +238,53 @@ export default function About() {
                 <h3 className="text-2xl font-black uppercase tracking-tighter mb-2">{vol.name}</h3>
                 <p className="text-orange-500 font-bold uppercase tracking-widest text-xs mb-4">{vol.role}</p>
                 <div className="w-10 h-1 bg-white/10 group-hover:w-full transition-all duration-500 mt-auto" />
+=======
+        <div className="flex gap-6 overflow-x-auto pb-10 snap-x snap-mandatory hide-scrollbar">
+          {volunteers.map((vol, index) => (
+            <div key={index} className="min-w-[280px] md:min-w-[320px] snap-center group">
+              {/* Dossier Card */}
+              <div className="bg-[#111] p-6 rounded-[2rem] border border-white/5 hover:border-orange-500/40 hover:-translate-y-2 transition-all duration-500 relative overflow-hidden flex flex-col items-center text-center h-full">
+                
+                {/* Active Ground Status */}
+                <div className="absolute top-4 right-6 flex items-center gap-2 z-20" title="Active on Ground">
+                  <span className="text-[9px] text-gray-500 font-bold uppercase tracking-widest group-hover:text-green-500 transition-colors duration-500">Active</span>
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                  </span>
+                </div>
+
+                {/* THE BULLETPROOF IMAGE CONTAINER */}
+                <div className="relative w-full aspect-[4/5] mb-6 mt-6 bg-black rounded-xl overflow-hidden border border-white/5 group-hover:border-orange-500/30 transition-colors">
+                  
+                  {/* 1. The Blurred Background (Fills the empty space with a cool glowing effect) */}
+                  <img
+                    src={vol.photo}
+                    alt="backdrop"
+                    className="absolute inset-0 w-full h-full object-cover blur-[20px] opacity-30 group-hover:opacity-50 transition-opacity duration-500"
+                    onError={(e) => { e.target.style.display='none' }}
+                  />
+                  
+                  {/* 2. The Actual Photo (object-contain ensures ZERO cropping) */}
+                  <img
+                    src={vol.photo}
+                    alt={vol.name}
+                    className="absolute inset-0 w-full h-full object-contain p-2 z-10 grayscale group-hover:grayscale-0 transition-all duration-500"
+                    onError={(e) => { e.target.src = "https://via.placeholder.com/300x400/111111/ea580c?text=TB" }}
+                  />
+
+                  {/* Tactical Screen Bracket Overlays */}
+                  <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-white/20 z-20" />
+                  <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-white/20 z-20" />
+                  <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-white/20 z-20" />
+                  <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-white/20 z-20" />
+                </div>
+                
+                {/* Operative Data */}
+                <h3 className="text-2xl font-black uppercase tracking-tighter mb-1 text-white group-hover:text-orange-500 transition-colors">{vol.name}</h3>
+                <p className="text-gray-400 font-bold uppercase tracking-[0.2em] text-[10px] mb-2">{vol.role}</p>
+
+>>>>>>> 55b3cce07cee20efddc7bb5be5787f03d4a9c773
               </div>
             </div>
           ))}
@@ -174,7 +312,10 @@ export default function About() {
         </div>
       </section>
 
+<<<<<<< HEAD
       {/* Global Styles for this page */}
+=======
+>>>>>>> 55b3cce07cee20efddc7bb5be5787f03d4a9c773
       <style dangerouslySetInnerHTML={{ __html: `
         .stroke-text {
           -webkit-text-stroke: 2px rgba(255,255,255,0.8);

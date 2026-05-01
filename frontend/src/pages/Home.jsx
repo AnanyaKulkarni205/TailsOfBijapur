@@ -29,7 +29,11 @@ export default function Home() {
             <span className="text-orange-600">REHOME.</span>
           </h1>
           
+<<<<<<< HEAD
           <div className="flex flex-col md:flex-row items-center justify-center gap-6 mt-12">
+=======
+        <div className="flex flex-col md:flex-row items-center justify-center gap-6 mt-12">
+>>>>>>> 55b3cce07cee20efddc7bb5be5787f03d4a9c773
             <button 
               onClick={() => nav("/donate")}
               className="group relative px-12 py-5 bg-white text-black font-black uppercase tracking-tighter overflow-hidden rounded-full transition-all hover:scale-105"
@@ -41,6 +45,7 @@ export default function Home() {
             </button>
             
             <button 
+<<<<<<< HEAD
               onClick={() => nav("/contact")}
               className="px-12 py-5 border-2 border-white/20 rounded-full font-black uppercase tracking-tighter hover:bg-white/10 transition-all flex items-center gap-3"
             >
@@ -80,6 +85,49 @@ export default function Home() {
             <div className="absolute top-0 right-0 w-1/2 h-full bg-orange-600/10 blur-[100px] rounded-full group-hover:bg-orange-600/20 transition-all" />
           </div>
 
+=======
+              onClick={() => nav("/adopt")}
+              className="group px-12 py-5 border-2 border-white/20 rounded-full font-black uppercase tracking-tighter hover:bg-white/10 transition-all flex items-center gap-3 text-lg"
+            >
+                Bring a Soul Home <Heart size={20} className="group-hover:scale-110 transition-transform text-orange-500" />   
+            </button>
+          </div>
+          </div>
+          </section>
+
+      
+
+      {/* ================= THE MARQUEE (Social Proof) ================= */}
+      <div className="bg-orange-600 py-4 border-y-2 border-black overflow-hidden whitespace-nowrap">
+        <div className="flex animate-marquee font-black uppercase text-2xl tracking-tighter italic text-black">
+          {[...Array(10)].map((_, i) => (
+            <span key={i} className="mx-8 flex items-center gap-4">
+              Tails of Bijapur <Zap fill="black" /> 50+ Rescued <Zap fill="black" /> Street Guardians <Zap fill="black" />
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* ================= BENTO GRID (The Work) ================= */}
+      <section className="py-32 px-4 md:px-12 max-w-screen-2xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+          
+          {/* Main Story Card */}
+          <div className="md:col-span-8 bg-[#151515] rounded-[3rem] p-12 relative overflow-hidden group">
+            <div className="relative z-10">
+              <span className="text-orange-500 font-bold uppercase tracking-widest text-sm mb-4 block">/ Mission Critical</span>
+              <h2 className="text-5xl md:text-7xl font-black tracking-tighter leading-none mb-8 max-w-2xl">
+                WE FIGHT FOR THE <span className="text-white/30">ABANDONED.</span>
+              </h2>
+              <p className="text-gray-400 text-xl max-w-xl leading-relaxed font-medium">
+                It is better to fight for a life the world discarded than to live accepting the silence. Compassion without action is just observation. We choose the front lines.
+              </p>
+            </div>
+            {/* Background Texture/Image */}
+            <div className="absolute top-0 right-0 w-1/2 h-full bg-orange-600/10 blur-[100px] rounded-full group-hover:bg-orange-600/20 transition-all" />
+          </div>
+
+>>>>>>> 55b3cce07cee20efddc7bb5be5787f03d4a9c773
           {/* Impact Stats */}
           <div className="md:col-span-4 grid grid-rows-2 gap-6">
             <div className="bg-orange-600 rounded-[3rem] p-10 flex flex-col justify-end group cursor-pointer overflow-hidden">
@@ -114,7 +162,11 @@ export default function Home() {
           <ActionCard 
             step="01" 
             title="Crisis Call" 
+<<<<<<< HEAD
             text="Our network alerts us to injured dogs, abandoned pups, or starving families." 
+=======
+            text="Our network connects with Veterinarians to understand the situation." 
+>>>>>>> 55b3cce07cee20efddc7bb5be5787f03d4a9c773
           />
           <ActionCard 
             step="02" 
@@ -131,6 +183,7 @@ export default function Home() {
 
       {/* ================= FOOTER / FINAL CALL ================= */}
       <footer className="bg-white text-black py-20 px-4 md:px-12 border-t border-gray-100">
+<<<<<<< HEAD
         <div className="flex flex-col md:flex-row justify-between items-center gap-10">
           <div className="text-center md:text-left">
              <p className="text-sm font-black uppercase tracking-[0.3em] text-gray-400 mb-2">Ready to Help?</p>
@@ -138,6 +191,20 @@ export default function Home() {
                JOIN THE PACK
              </h4>
           </div>
+=======
+      <div className="flex flex-col md:flex-row justify-between items-center gap-10">
+        <div className="text-center md:text-left">
+          <p className="text-sm font-black uppercase tracking-[0.3em] text-gray-400 mb-2">Ready to Help?</p>
+          <h4 
+            onClick={() => nav("/volunteer")}
+            className="text-4xl md:text-6xl font-black tracking-tighter underline decoration-orange-600 underline-offset-8 transition-all hover:text-orange-600 cursor-pointer"
+          >
+            JOIN THE PACK
+          </h4>
+        </div>
+
+
+>>>>>>> 55b3cce07cee20efddc7bb5be5787f03d4a9c773
           <div className="flex gap-4">
              {["Instagram", "Twitter", "Facebook"].map(link => (
                <button key={link} className="px-6 py-2 border-2 border-black font-bold uppercase text-xs rounded-full hover:bg-black hover:text-white transition-all">

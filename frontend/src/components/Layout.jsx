@@ -75,6 +75,7 @@ const Nav = () => {
               </NavLink>
             ))}
           </div>
+<<<<<<< HEAD
 
           <div className="h-6 w-[1px] bg-white/20 mx-2" />
 
@@ -93,6 +94,20 @@ const Nav = () => {
           >
             Report Animal
           </button>
+=======
+
+          <div className="h-6 w-[1px] bg-white/20 mx-2" />
+
+          {/* EMERGENCY STATUS */}
+          <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full border border-white/10 cursor-help" title="Rescue Team is currently on ground">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+            </span>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-white">Rescue Active</span>
+          </div>
+
+>>>>>>> 55b3cce07cee20efddc7bb5be5787f03d4a9c773
         </div>
 
         {/* MOBILE TOGGLE */}
@@ -113,12 +128,15 @@ const Nav = () => {
             {link.name}
           </NavLink>
         ))}
+<<<<<<< HEAD
         <button 
           onClick={() => { nav("/contact"); setIsOpen(false); }}
           className="mt-8 px-12 py-4 bg-orange-600 text-white font-black uppercase tracking-widest rounded-full"
         >
           Report Animal
         </button>
+=======
+>>>>>>> 55b3cce07cee20efddc7bb5be5787f03d4a9c773
       </div>
     </nav>
   );
@@ -157,17 +175,31 @@ const Footer = () => {
 
           {/* QUICK LINKS GRID */}
           <div className="md:col-span-5 grid grid-cols-2 gap-12 pt-4">
+<<<<<<< HEAD
+=======
+            
+            {/* Column 1: Nav */}
+>>>>>>> 55b3cce07cee20efddc7bb5be5787f03d4a9c773
             <div className="space-y-8">
               <p className="text-orange-600 font-black uppercase text-sm tracking-[0.3em] flex items-center gap-2">
                 <span className="w-2 h-2 bg-orange-600 rounded-full block"></span> Nav
               </p>
               <ul className="space-y-5 text-gray-400 font-bold uppercase text-lg tracking-tighter">
                 <li><Link to="/about" className="hover:text-white transition-colors flex items-center gap-2 group"><ArrowUpRight size={16} className="opacity-0 group-hover:opacity-100 transition-opacity" /> Our Story</Link></li>
+<<<<<<< HEAD
                 <li><Link to="/adopt" className="hover:text-white transition-colors flex items-center gap-2 group"><ArrowUpRight size={16} className="opacity-0 group-hover:opacity-100 transition-opacity" /> Adoptable</Link></li>
                 <li><Link to="/why-adopt" className="hover:text-white transition-colors flex items-center gap-2 group"><ArrowUpRight size={16} className="opacity-0 group-hover:opacity-100 transition-opacity" /> Why Adopt</Link></li>
               </ul>
             </div>
             
+=======
+                <li><Link to="/adopt" className="hover:text-white transition-colors flex items-center gap-2 group"><ArrowUpRight size={16} className="opacity-0 group-hover:opacity-100 transition-opacity" /> Adoptable Rescues</Link></li>
+                <li><Link to="/indies" className="hover:text-white transition-colors flex items-center gap-2 group"><ArrowUpRight size={16} className="opacity-0 group-hover:opacity-100 transition-opacity" /> Indies Philosophy</Link></li>
+              </ul>
+            </div>
+            
+            {/* Column 2: Action */}
+>>>>>>> 55b3cce07cee20efddc7bb5be5787f03d4a9c773
             <div className="space-y-8">
               <p className="text-orange-600 font-black uppercase text-sm tracking-[0.3em] flex items-center gap-2">
                 <span className="w-2 h-2 bg-orange-600 rounded-full block"></span> Action
@@ -175,6 +207,7 @@ const Footer = () => {
               <ul className="space-y-5 text-gray-400 font-bold uppercase text-lg tracking-tighter">
                 <li><Link to="/donate" className="hover:text-white transition-colors flex items-center gap-2 group"><ArrowUpRight size={16} className="opacity-0 group-hover:opacity-100 transition-opacity" /> Financial Aid</Link></li>
                 <li><Link to="/volunteer" className="hover:text-white transition-colors flex items-center gap-2 group"><ArrowUpRight size={16} className="opacity-0 group-hover:opacity-100 transition-opacity" /> Volunteer Ground</Link></li>
+<<<<<<< HEAD
                 <li><Link to="/contact" className="hover:text-white transition-colors flex items-center gap-2 group"><ArrowUpRight size={16} className="opacity-0 group-hover:opacity-100 transition-opacity" /> Report Crisis</Link></li>
               </ul>
             </div>
@@ -195,6 +228,29 @@ const Footer = () => {
           </div>
         </div>
 
+=======
+                <li><Link to="/awareness" className="hover:text-white transition-colors flex items-center gap-2 group"><ArrowUpRight size={16} className="opacity-0 group-hover:opacity-100 transition-opacity" /> Public Awareness</Link></li>
+              </ul>
+            </div>
+            
+          </div>
+          </div>
+
+        {/* BOTTOM STRIP */}
+        <div className="pt-10 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="text-[10px] md:text-xs font-black text-gray-500 uppercase tracking-[0.4em] flex flex-col md:flex-row gap-2">
+            <span>&copy; {currentYear} TAILS OF BIJAPUR &bull; FOR THE VOICELESS.</span>
+            <span>DESIGNED BY <a href="https://www.linkedin.com/in/ananya-kulkarni-234459370" target="_blank" rel="noreferrer" className="text-orange-600 hover:text-white transition-colors">ANANYA KULKARNI</a></span>
+          </div>
+          
+          <div className="flex gap-6 text-gray-500 text-xs">
+             <div className="flex items-center gap-2"><FaMapMarkerAlt /> Bijapur, Karnataka</div>
+             <div className="flex items-center gap-2"><FaPhoneAlt /> +91 81230 38270</div>
+             <div className="flex items-center gap-2"><FaEnvelope /> tailsofbijapur@gmail.com</div>
+          </div>
+        </div>
+
+>>>>>>> 55b3cce07cee20efddc7bb5be5787f03d4a9c773
       </div>
     </footer>
   );

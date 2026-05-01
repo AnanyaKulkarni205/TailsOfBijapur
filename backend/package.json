@@ -8,7 +8,11 @@
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
+<<<<<<< HEAD
     "cloudinary": "^1.41.3",
+=======
+    "cloudinary": "^2.9.0",
+>>>>>>> 55b3cce07cee20efddc7bb5be5787f03d4a9c773
     "cors": "^2.8.6",
     "dotenv": "^16.6.1",
     "express": "^4.22.1",

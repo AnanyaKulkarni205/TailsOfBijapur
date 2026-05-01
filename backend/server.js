@@ -99,7 +99,11 @@ const Volunteer = mongoose.model("Volunteer", volunteerSchema);
 ============================== */
 
 const storage = new CloudinaryStorage({
+<<<<<<< HEAD
     cloudinary,
+=======
+    cloudinary: cloudinary,
+>>>>>>> 55b3cce07cee20efddc7bb5be5787f03d4a9c773
     params: {
         folder: "tails_of_bijapur",
         allowed_formats: ["jpg", "png", "jpeg"],
@@ -107,7 +111,11 @@ const storage = new CloudinaryStorage({
 });
 
 const upload = multer({
+<<<<<<< HEAD
     storage,
+=======
+    storage: storage,
+>>>>>>> 55b3cce07cee20efddc7bb5be5787f03d4a9c773
     limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
 });
 
@@ -170,12 +178,31 @@ app.post(
 );
 
 /* ==============================
+<<<<<<< HEAD
    Volunteer Submit
+=======
+   Volunteer Submit (FIXED: Added Admin Email)
+>>>>>>> 55b3cce07cee20efddc7bb5be5787f03d4a9c773
 ============================== */
 
 app.post("/api/volunteer", async(req, res) => {
     try {
+<<<<<<< HEAD
         await Volunteer.create(req.body);
+=======
+        const submission = await Volunteer.create(req.body);
+
+        // Alert the Admin
+        transporter
+            .sendMail({
+                from: `"Tails of Bijapur" <${process.env.SMTP_USER}>`,
+                to: process.env.ADMIN_EMAIL,
+                subject: `🚨 New Volunteer Recruit - ${submission.name}`,
+                text: `A new volunteer (${submission.name} - ${submission.role}) has applied. Log into the command center to review.`,
+            })
+            .catch((err) => console.error("Email Error:", err.message));
+
+>>>>>>> 55b3cce07cee20efddc7bb5be5787f03d4a9c773
         res.json({ ok: true });
     } catch (err) {
         console.error(err);
@@ -222,6 +249,7 @@ function verifyAdmin(req, res, next) {
         res.status(401).json({ error: "Invalid token" });
     }
 }
+<<<<<<< HEAD
 
 /* ==============================
    Admin Routes
@@ -301,3 +329,137 @@ app.get("/api/approved-puppies", async(req, res) => {
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+=======
+
+/* ==============================
+   Admin Routes (FIXED: Added Volunteer Routes)
+============================== */
+
+// --- ADOPTIONS ---
+app.get("/api/admin/pending", verifyAdmin, async(req, res) => {
+    try {
+        const data = await Adoption.find({ status: "pending" })
+            .sort({ createdAt: -1 })
+            .lean();
+
+        res.json(data);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to fetch adoptions" });
+    }
+});
+
+app.patch("/api/admin/adoptions/:id", verifyAdmin, async(req, res) => {
+    try {
+        const { status } = req.body;
+
+        if (!["approved", "rejected"].includes(status)) {
+            return res.status(400).json({ error: "Invalid status" });
+        }
+
+        const updated = await Adoption.findByIdAndUpdate(
+            req.params.id, { status }, { new: true }
+        );
+
+        if (!updated) {
+            return res.status(404).json({ error: "Record not found" });
+        }
+
+        if (status === "approved" && updated.email) {
+            transporter
+                .sendMail({
+                    from: `"Tails of Bijapur" <${process.env.SMTP_USER}>`,
+                    to: updated.email,
+                    subject: "🐾 Adoption Approved!",
+                    text: `Hello ${updated.name}, your adoption request is approved!`,
+                })
+                .catch((err) => console.error(err.message));
+        }
+
+        res.json(updated);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Update failed" });
+    }
+});
+
+// --- VOLUNTEERS ---
+app.get("/api/admin/volunteers", verifyAdmin, async(req, res) => {
+    try {
+        const data = await Volunteer.find({ status: "pending" })
+            .sort({ createdAt: -1 })
+            .lean();
+
+        res.json(data);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to fetch volunteers" });
+    }
+});
+
+app.patch("/api/admin/volunteers/:id", verifyAdmin, async(req, res) => {
+    try {
+        const { status } = req.body;
+
+        if (!["approved", "rejected"].includes(status)) {
+            return res.status(400).json({ error: "Invalid status" });
+        }
+
+        const updated = await Volunteer.findByIdAndUpdate(
+            req.params.id, { status }, { new: true }
+        );
+
+        if (!updated) {
+            return res.status(404).json({ error: "Record not found" });
+        }
+
+        if (status === "approved" && updated.email) {
+            transporter
+                .sendMail({
+                    from: `"Tails of Bijapur" <${process.env.SMTP_USER}>`,
+                    to: updated.email,
+                    subject: "🐾 Welcome to the Vanguard!",
+                    text: `Hello ${updated.name}, your volunteer application has been approved! We will be in touch shortly.`,
+                })
+                .catch((err) => console.error(err.message));
+        }
+
+        res.json(updated);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Update failed" });
+    }
+});
+
+/* ==============================
+   Public Approved Puppies
+============================== */
+
+app.get("/api/approved-puppies", async(req, res) => {
+    try {
+        const data = await Adoption.find({ status: "approved" })
+            .select(
+                "name age gender vaccinated description imageUrl reportername location"
+            )
+            .sort({ createdAt: -1 })
+            .lean();
+
+        res.json(data);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to fetch" });
+    }
+});
+
+/* ==============================
+   Start Server (FIXED)
+============================== */
+
+// Start the server directly for local testing
+app.listen(PORT, () => {
+    console.log(`🚀 Command Center Online: Port ${PORT}`);
+});
+
+// Export for Vercel/Serverless if needed
+module.exports = app;
+>>>>>>> 55b3cce07cee20efddc7bb5be5787f03d4a9c773
